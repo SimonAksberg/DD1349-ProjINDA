@@ -5,5 +5,22 @@
 </head>
 <body>
     <h1>To Do's</h1>
+
+    <input id="listInput" placeholder="Create a new list">
+    <button onclick="addList()">Add List</button>
+    
+    <script> 
+        function addList() {
+            const listName = document.getElementById("listInput").value;
+
+            fetch("/api/lists", {
+                method: "POST",
+                body: listName
+            })
+            .then(res => res.text())
+            .then(data => console.log(data));
+            document.getElementById("listInput").value = "";
+        }
+    </script>
 </body>
 </html>
