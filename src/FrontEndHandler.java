@@ -18,8 +18,10 @@ public class FrontEndHandler implements HttpHandler {
         exchange.getResponseHeaders().set("Content-Type", "text/html");
         exchange.sendResponseHeaders(200, html.length);
 
-        OutputStream os = exchange.getResponseBody();
-        os.write(html);
-        os.close();
+        try (OutputStream os = exchange.getResponseBody()) {
+            os.write(html);
+        } finally {
+            exchange.close();
+        }
     }
 }
