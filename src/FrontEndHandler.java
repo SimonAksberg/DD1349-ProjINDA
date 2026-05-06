@@ -7,10 +7,14 @@ import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpExchange;
 
 public class FrontEndHandler implements HttpHandler {
+    private final byte[] html;
+
+    public FrontEndHandler() throws IOException {
+        this.html = Files.readAllBytes(Paths.get("index.html"));
+    }
+
     @Override
     public void handle(HttpExchange exchange) throws IOException {
-        byte[] html = Files.readAllBytes(Paths.get("index.html"));
-
         exchange.getResponseHeaders().set("Content-Type", "text/html");
         exchange.sendResponseHeaders(200, html.length);
 
