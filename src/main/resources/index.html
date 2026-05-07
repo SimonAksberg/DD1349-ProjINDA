@@ -8,7 +8,9 @@
 
     <input id="listInput" placeholder="Create a new list">
     <button onclick="addList()">Add List</button>
-    
+
+    <div id="listsContainer"></div>
+
     <script> 
         function addList() {
             const listName = document.getElementById("listInput").value;
@@ -20,6 +22,37 @@
             .then(res => res.text())
             .then(data => console.log(data));
             document.getElementById("listInput").value = "";
+            
+            loadLists();
+        }
+
+        function loadLists() {
+            fetch("/api/lists")
+            .then(res => res.json())
+            .then(lists => {
+                const container = document.getElementById("listsContainer");
+                container.innerHTML = "";
+
+                lists.forEach(list => {
+                    const div = createListElement(list.name, list.id);
+                    container.appendChild(div);
+                });
+            });
+        }
+
+        function createListElement(listName, listId) {
+            const div = document.createElement("div");
+            div.className = "list";
+            div.setAttribute("data-list-id", listId);
+
+            div.innerHTML = `
+                <h2>${listName}</h2>
+                <input class="taskInput" placeholder="New task">
+                <button onclick="addTask(this)">Add</button>
+                <ul class="taskList"></ul>
+            `;
+
+            return div;
         }
     </script>
 </body>
