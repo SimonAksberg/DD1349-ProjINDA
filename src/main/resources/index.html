@@ -69,6 +69,23 @@
 
             return div;
         }
+
+        function addTask(button) {
+            const listDiv = button.closest(".list");
+            const listId = listDiv.dataset.listId;
+
+            const input = listDiv.querySelector(".taskInput");
+            const name = input.value;
+
+            fetch(`/api/lists/${listId}/tasks`, {
+                method: "POST",
+                body: name 
+            })
+            .then(res => res.text())
+            .then(data => console.log(data));
+        
+            input.value = "";
+        }
     </script>
 </body>
 </html>
