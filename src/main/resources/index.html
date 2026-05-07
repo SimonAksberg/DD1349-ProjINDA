@@ -82,11 +82,12 @@
                 body: name 
             })
             .then(res => res.text())
-            .then(data => console.log(data));
+            .then(data => {
+                console.log(data);
+                loadTasks(listDiv);
+            });
         
             input.value = "";
-            
-            loadTasks(listDiv);
         }
 
         function loadTasks(listDiv) {
