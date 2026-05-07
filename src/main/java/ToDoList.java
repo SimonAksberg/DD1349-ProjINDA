@@ -2,18 +2,18 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class ToDoList {
-    public final LocalDateTime id;
+    public final String id;
     private String name; 
     private ArrayList<Task> tasksList;
 
     private static class Task {
-        private final LocalDateTime id;
+        private final String id;
         public String name;
         public boolean completed;
         public Task subtask;
 
         public Task(String name) {
-            id = LocalDateTime.now();
+            id = LocalDateTime.now().toString();
             this.name = name;
             completed = false;
             subtask = null;
@@ -21,7 +21,7 @@ public class ToDoList {
     }
 
     public ToDoList(String name) {
-        id = LocalDateTime.now();
+        id = LocalDateTime.now().toString();
         this.name = name;
         tasksList = new ArrayList<>();
     }
