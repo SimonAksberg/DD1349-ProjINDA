@@ -45,5 +45,9 @@ public class ToDoList {
     public ArrayList<Task> getTasksList() {
         return tasksList;
     }
+
+    public String getListId() {
+        return id;
+    }
 }
 

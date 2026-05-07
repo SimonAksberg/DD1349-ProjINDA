@@ -40,6 +40,20 @@
             });
         }
 
+        function deleteList(button) {
+            const listDiv = button.closest(".list");
+            const listId = listDiv.dataset.listId;
+
+            fetch("/api/lists", {
+                method: "DELETE",
+                body: listId
+            })
+            .then(res => res.text())
+            .then(data => console.log(data));
+            
+            loadLists()
+        }
+
         function createListElement(listName, listId) {
             const div = document.createElement("div");
             div.className = "list";
@@ -49,6 +63,7 @@
                 <h2>${listName}</h2>
                 <input class="taskInput" placeholder="New task">
                 <button onclick="addTask(this)">Add</button>
+                <button onclick="deleteList(this)">Delete This List</button>
                 <ul class="taskList"></ul>
             `;
 

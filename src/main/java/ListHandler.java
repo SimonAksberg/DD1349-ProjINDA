@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Iterator;
 import java.util.List;
 
 import com.sun.net.httpserver.HttpHandler;
@@ -45,6 +46,29 @@ public class ListHandler implements HttpHandler {
             }
             exchange.close();
             return;
+        }
+
+        if (exchange.getRequestMethod().equals("DELETE")) {
+
+        InputStream is = exchange.getRequestBody();
+        String listId = new String(is.readAllBytes());
+        Iterator <ToDoList> iterator = lists.iterator();
+        
+        while (iterator.hasNext()) {
+            ToDoList list = iterator.next();
+            if (list.getListId().equals(listId)) {
+                iterator.remove();
+            }
+        }
+
+        String response = "List deleted";
+
+        exchange.sendResponseHeaders(200, response.getBytes().length);
+        try (OutputStream os = exchange.getResponseBody()) {
+            os.write(response.getBytes());
+        }
+        exchange.close();
+        return;
         }
     }
 }
