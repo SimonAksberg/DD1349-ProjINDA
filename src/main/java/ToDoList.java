@@ -2,21 +2,37 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class ToDoList {
-    public final String id;
+    private final String id;
     private String name; 
     private ArrayList<Task> tasksList;
 
-    private static class Task {
+    public static class Task {
         private final String id;
-        public String name;
-        public boolean completed;
-        public Task subtask;
+        private String name;
+        private boolean completed;
+        private Task subtask;
 
         public Task(String name) {
             id = LocalDateTime.now().toString();
             this.name = name;
             completed = false;
             subtask = null;
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public boolean isCompleted() {
+            return completed;
+        }
+
+        public Task getSubtask() {
+            return subtask;
         }
     }
 

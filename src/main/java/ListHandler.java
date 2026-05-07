@@ -84,12 +84,7 @@ public class ListHandler implements HttpHandler {
             InputStream is = exchange.getRequestBody();
             String name = new String(is.readAllBytes());
 
-            for (ToDoList list : lists) {
-                if(list.getListId().equals(listId)) {
-                    list.addTask(name);
-                    break;
-                }
-            }
+            findListById(listId).addTask(name);
 
             String response = "Task added";
         
@@ -100,5 +95,28 @@ public class ListHandler implements HttpHandler {
             exchange.close();
             return;
         }
+
+        if (exchange.getRequestMethod().equals("GET")) {
+            ToDoList list = findListById(listId);
+            String response = mapper.writeValueAsString(list.getTasksList());
+                    
+            exchange.getResponseHeaders().set("Content-Type", "application/json");
+            exchange.sendResponseHeaders(200, response.getBytes().length);
+            try (OutputStream os = exchange.getResponseBody()) {
+                os.write(response.getBytes());
+            }
+            exchange.close();
+            return;
+        }
     }
+
+    private ToDoList findListById(String listId) {
+        for (ToDoList list : lists) {
+            if(list.getListId().equals(listId)) {
+                return list;
+            } 
+        }
+        return null;
+    }
+    
 }
