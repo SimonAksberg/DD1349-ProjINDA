@@ -79,7 +79,7 @@ public class ListHandler implements HttpHandler {
         }
     }
 
-    public void handleTasks(HttpExchange exchange, String listId) throws IOException {
+    private void handleTasks(HttpExchange exchange, String listId) throws IOException {
         if (exchange.getRequestMethod().equals("POST")) {
             InputStream is = exchange.getRequestBody();
             String name = new String(is.readAllBytes());
