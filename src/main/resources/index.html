@@ -34,24 +34,10 @@
                 container.innerHTML = "";
 
                 lists.forEach(list => {
-                    const div = createListElement(list.name, list.id);
+                    const div = createListElement(list.name, list.listId);
                     container.appendChild(div);
                 });
             });
-        }
-
-        function deleteList(button) {
-            const listDiv = button.closest(".list");
-            const listId = listDiv.dataset.listId;
-
-            fetch("/api/lists", {
-                method: "DELETE",
-                body: listId
-            })
-            .then(res => res.text())
-            .then(data => console.log(data));
-            
-            loadLists()
         }
 
         function createListElement(listName, listId) {
@@ -70,6 +56,20 @@
             return div;
         }
 
+        function deleteList(button) {
+            const listDiv = button.closest(".list");
+            const listId = listDiv.dataset.listId;
+
+            fetch("/api/lists", {
+                method: "DELETE",
+                body: listId
+            })
+            .then(res => res.text())
+            .then(data => console.log(data));
+            
+            loadLists()
+        }
+
         function addTask(button) {
             const listDiv = button.closest(".list");
             const listId = listDiv.dataset.listId;
@@ -85,6 +85,39 @@
             .then(data => console.log(data));
         
             input.value = "";
+            
+            loadTasks(listDiv);
+        }
+
+        function loadTasks(listDiv) {
+            const listId = listDiv.dataset.listId;
+
+            fetch(`/api/lists/${listId}/tasks`)
+            .then(res => res.json())
+            .then(tasks => {
+                const taskList = listDiv.querySelector(".taskList");
+                taskList.innerHTML = "";
+
+                tasks.forEach(task => {
+                    const li = createTaskElement(task.name, task.id, task.completed);
+                    taskList.appendChild(li);
+                });
+            });
+        }
+
+        function createTaskElement(taskName, taskId, taskCompletion) {
+            const li = document.createElement("li");
+
+            li.className = "task";
+            li.setAttribute("data-task-id", taskId);
+            li.setAttribute("data-task-completion", taskCompletion)
+
+            li.innerHTML = `
+                ${taskName}
+                <button>Placeholder</button>
+            `;
+
+            return li;
         }
     </script>
 </body>
