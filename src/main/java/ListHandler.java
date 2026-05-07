@@ -19,6 +19,13 @@ public class ListHandler implements HttpHandler {
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
+        String path = exchange.getRequestURI().getPath();
+        String[] parts = path.split("/");
+        if (parts.length > 4 && parts[4].equals("tasks")) {
+            handleTasks(exchange, parts[3]);
+            return;  
+        }
+
         if (exchange.getRequestMethod().equals("POST")) {
 
             InputStream is = exchange.getRequestBody();
@@ -63,6 +70,29 @@ public class ListHandler implements HttpHandler {
 
             String response = "List deleted";
 
+            exchange.sendResponseHeaders(200, response.getBytes().length);
+            try (OutputStream os = exchange.getResponseBody()) {
+                os.write(response.getBytes());
+            }
+            exchange.close();
+            return;
+        }
+    }
+
+    private void handleTasks(HttpExchange exchange, String listId) throws IOException {
+        if (exchange.getRequestMethod().equals("POST")) {
+            InputStream is = exchange.getRequestBody();
+            String name = new String(is.readAllBytes());
+
+            for (ToDoList list : lists) {
+                if(list.getListId().equals(listId)) {
+                    list.addTask(name);
+                    break;
+                }
+            }
+
+            String response = "Task added";
+        
             exchange.sendResponseHeaders(200, response.getBytes().length);
             try (OutputStream os = exchange.getResponseBody()) {
                 os.write(response.getBytes());
