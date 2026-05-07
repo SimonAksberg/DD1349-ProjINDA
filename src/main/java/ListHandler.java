@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
 
 import com.sun.net.httpserver.HttpHandler;
@@ -27,8 +28,11 @@ public class ListHandler implements HttpHandler {
             String response = "List added";
         
             exchange.sendResponseHeaders(200, response.getBytes().length);
-            exchange.getResponseBody().write(response.getBytes());
+            try (OutputStream os = exchange.getResponseBody()) {
+                os.write(response.getBytes());
+            }
             exchange.close();
+            return;
         }
 
         if (exchange.getRequestMethod().equals("GET")) {
@@ -36,8 +40,11 @@ public class ListHandler implements HttpHandler {
                     
             exchange.getResponseHeaders().set("Content-Type", "application/json");
             exchange.sendResponseHeaders(200, response.getBytes().length);
-            exchange.getResponseBody().write(response.getBytes());
+            try (OutputStream os = exchange.getResponseBody()) {
+                os.write(response.getBytes());
+            }
             exchange.close();
+            return;
         }
     }
 }
