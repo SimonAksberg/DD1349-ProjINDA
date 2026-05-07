@@ -34,16 +34,16 @@
                 container.innerHTML = "";
 
                 lists.forEach(list => {
-                    const div = createListElement(list.name);
+                    const div = createListElement(list.name, list.id);
                     container.appendChild(div);
                 });
             });
         }
 
-        function createListElement(listName) {
+        function createListElement(listName, listId) {
             const div = document.createElement("div");
             div.className = "list";
-            div.setAttribute("data-list-id", listName);
+            div.setAttribute("data-list-id", listId);
 
             div.innerHTML = `
                 <h2>${listName}</h2>
