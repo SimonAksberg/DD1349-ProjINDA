@@ -36,6 +36,7 @@
                 lists.forEach(list => {
                     const div = createListElement(list.name, list.listId);
                     container.appendChild(div);
+                    loadTasks(div);
                 });
             });
         }
