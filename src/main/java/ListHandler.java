@@ -77,6 +77,34 @@ public class ListHandler implements HttpHandler {
             exchange.close();
             return;
         }
+
+        if (exchange.getRequestMethod().equals("PUT")) {
+
+            InputStream is = exchange.getRequestBody();
+            String listData = new String(is.readAllBytes());
+
+            String[] separatedListData = listData.split(",");
+            String listId = separatedListData[0];
+            String newName = separatedListData[1];
+
+            Iterator <ToDoList> iterator = lists.iterator();
+
+            while(iterator.hasNext()) {
+                ToDoList list = iterator.next();
+                if (list.getListId().equals(listId)) {
+                    list.setListName(newName);
+                }
+            }
+
+            String response = "List renamed";
+
+            exchange.sendResponseHeaders(200, response.getBytes().length);
+            try (OutputStream os = exchange.getResponseBody()) {
+                os.write(response.getBytes());
+            }
+            exchange.close();
+            return;
+        }
     }
 
     private void handleTasks(HttpExchange exchange, String listId) throws IOException {
