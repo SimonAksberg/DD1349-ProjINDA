@@ -156,6 +156,7 @@ public class ListHandler implements HttpHandler {
             for (ToDoList.Task task : taskList) {
                 if(task.getId().equals(taskId)) {
                     task.setTaskName(newName);
+                    break;
                 }
             }
 
