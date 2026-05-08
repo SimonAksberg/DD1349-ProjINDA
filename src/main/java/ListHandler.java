@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -118,6 +119,22 @@ public class ListHandler implements HttpHandler {
             String response = mapper.writeValueAsString(list.getTasksList());
                     
             exchange.getResponseHeaders().set("Content-Type", "application/json");
+            exchange.sendResponseHeaders(200, response.getBytes().length);
+            try (OutputStream os = exchange.getResponseBody()) {
+                os.write(response.getBytes());
+            }
+            exchange.close();
+            return;
+        }
+
+        if (exchange.getRequestMethod().equals("DELETE")) {
+            InputStream is = exchange.getRequestBody();
+            String taskId = new String(is.readAllBytes());
+
+            findListById(listId).getTasksList().removeIf(task -> task.getId().equals(taskId));
+
+            String response = "Task deleted";
+
             exchange.sendResponseHeaders(200, response.getBytes().length);
             try (OutputStream os = exchange.getResponseBody()) {
                 os.write(response.getBytes());
