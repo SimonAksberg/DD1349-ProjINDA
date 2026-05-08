@@ -152,10 +152,36 @@
 
             li.innerHTML = `
                 ${taskName}
-                <button>Placeholder</button>
+                <button onclick="toggleSettings(this)">
+                    Settings
+                </button>
+
+                <div class="settingsMenu" style="display: none;">
+                    <button onclick="deleteTask(this)">
+                        Delete This Task
+                    </button>
+                </div>
             `;
 
             return li;
+        }
+
+        function deleteTask(button) {
+            const listDiv = button.closest(".list");
+            const listId = listDiv.dataset.listId;
+
+            const taskLi = button.closest(".task");
+            const taskId = taskLi.dataset.taskId;
+
+            fetch(`/api/lists/${listId}/tasks`, {
+                method: "DELETE",
+                body: taskId
+            })
+            .then(res => res.text())
+            .then(data => console.log(data));
+
+            loadTasks(listDiv);
+
         }
         
         function toggleSettings(button) {

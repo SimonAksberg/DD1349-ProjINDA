@@ -58,7 +58,7 @@ public class ToDoList {
         return name;
     }
 
-    public ArrayList<Task> getTasksList() {
+    public ArrayList<ToDoList.Task> getTasksList() {
         return tasksList;
     }
 
