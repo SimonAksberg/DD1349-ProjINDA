@@ -83,9 +83,10 @@
                 body: listId
             })
             .then(res => res.text())
-            .then(data => console.log(data));
-            
-            loadLists();
+            .then(data => {
+                console.log(data);
+                loadLists();
+            });
         }
 
         function renameList(button) {
@@ -103,11 +104,13 @@
                 body: listId + "," + newName 
             })
             .then(res => res.text())
-            .then(data => console.log(data));
-
-            loadLists();
-
+            .then(data => {
+                console.log(data);
+                loadLists();
+            });
+            
             newNameInput.value = "";
+
         }
 
         function addTask(button) {
@@ -189,10 +192,10 @@
                 body: taskId
             })
             .then(res => res.text())
-            .then(data => console.log(data));
-
-            loadTasks(listDiv);
-
+            .then(data => {
+                console.log(data);
+                loadTasks(listDiv);
+            });
         }
 
         function renameTask(button) {
@@ -214,10 +217,12 @@
                 body: taskId + "," + newName 
             })
             .then(res => res.text())
-            .then(data => console.log(data));
+            .then(data => {
+                console.log(data);
+                loadTasks(listDiv);
+            });
+            
             newNameInput.value = "";
-
-            loadTasks(listDiv);
         }
         
         function toggleSettings(button) {
