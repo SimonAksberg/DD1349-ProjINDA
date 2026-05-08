@@ -13,7 +13,8 @@
 
     <script> 
         function addList() {
-            const listName = document.getElementById("listInput").value;
+            const listName = document.getElementById("listInput").value.trim();
+            if (listName === "") return;
 
             fetch("/api/lists", {
                 method: "POST",
@@ -94,7 +95,8 @@
 
             const newNameInput = listDiv.querySelector(".renameInput");
 
-            const newName = newNameInput.value;
+            const newName = newNameInput.value.trim();
+            if (newName === "") return;
 
             fetch("/api/lists", {
                 method: "PUT",
@@ -113,7 +115,8 @@
             const listId = listDiv.dataset.listId;
 
             const input = listDiv.querySelector(".taskInput");
-            const name = input.value;
+            const name = input.value.trim();
+            if (name === "") return;
 
             fetch(`/api/lists/${listId}/tasks`, {
                 method: "POST",
@@ -203,7 +206,8 @@
 
             const newNameInput = taskLi.querySelector(".renameInput");
 
-            const newName = newNameInput.value;
+            const newName = newNameInput.value.trim();
+            if (newName === "") return;
 
             fetch(`/api/lists/${listId}/tasks`, {
                 method: "PUT",
