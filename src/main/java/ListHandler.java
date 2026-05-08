@@ -142,6 +142,33 @@ public class ListHandler implements HttpHandler {
             exchange.close();
             return;
         }
+
+        if (exchange.getRequestMethod().equals("PUT")) {
+            InputStream is = exchange.getRequestBody();
+            String taskData = new String(is.readAllBytes());
+            String[] separatedTaskData = taskData.split(",");
+
+            String taskId = separatedTaskData[0];
+            String newName = separatedTaskData[1];
+
+            ArrayList<ToDoList.Task> taskList = findListById(listId).getTasksList();
+
+            for (ToDoList.Task task : taskList) {
+                if(task.getId().equals(taskId)) {
+                    task.setTaskName(newName);
+                    break;
+                }
+            }
+
+            String response = "Task renamed";
+
+            exchange.sendResponseHeaders(200, response.getBytes().length);
+            try (OutputStream os = exchange.getResponseBody()) {
+                os.write(response.getBytes());
+            }
+            exchange.close();
+            return;
+        }
     }
 
     private ToDoList findListById(String listId) {

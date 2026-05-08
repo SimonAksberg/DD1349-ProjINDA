@@ -34,6 +34,10 @@ public class ToDoList {
         public Task getSubtask() {
             return subtask;
         }
+
+        public void setTaskName(String newName) {
+            this.name = newName;
+        }
     }
 
     public ToDoList(String name) {
