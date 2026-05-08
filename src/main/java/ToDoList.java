@@ -65,5 +65,9 @@ public class ToDoList {
     public String getListId() {
         return id;
     }
+
+    public void setListName(String newName) {
+        name = newName;
+    }
 }
 

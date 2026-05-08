@@ -83,7 +83,28 @@
             .then(res => res.text())
             .then(data => console.log(data));
             
-            loadLists()
+            loadLists();
+        }
+
+        function renameList(button) {
+            const listDiv = button.closest(".list");
+
+            const listId = listDiv.dataset.listId;
+
+            const newNameInput = listDiv.querySelector(".renameInput");
+
+            const newName = newNameInput.value;
+
+            fetch("/api/lists", {
+                method: "PUT",
+                body: listId + "," + newName 
+            })
+            .then(res => res.text())
+            .then(data => console.log(data));
+
+            loadLists();
+
+            newNameInput.value = "";
         }
 
         function addTask(button) {

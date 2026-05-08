@@ -59,16 +59,33 @@ public class ListHandler implements HttpHandler {
 
             InputStream is = exchange.getRequestBody();
             String listId = new String(is.readAllBytes());
-            Iterator <ToDoList> iterator = lists.iterator();
-            
-            while (iterator.hasNext()) {
-                ToDoList list = iterator.next();
-                if (list.getListId().equals(listId)) {
-                    iterator.remove();
-                }
-            }
+
+            ToDoList searchedList = findListById(listId);
+            lists.remove(searchedList);
 
             String response = "List deleted";
+
+            exchange.sendResponseHeaders(200, response.getBytes().length);
+            try (OutputStream os = exchange.getResponseBody()) {
+                os.write(response.getBytes());
+            }
+            exchange.close();
+            return;
+        }
+
+        if (exchange.getRequestMethod().equals("PUT")) {
+
+            InputStream is = exchange.getRequestBody();
+            String listData = new String(is.readAllBytes());
+
+            String[] separatedListData = listData.split(",");
+            String listId = separatedListData[0];
+            String newName = separatedListData[1];
+
+            ToDoList searchedList = findListById(listId);
+            searchedList.setListName(newName);
+
+            String response = "List renamed";
 
             exchange.sendResponseHeaders(200, response.getBytes().length);
             try (OutputStream os = exchange.getResponseBody()) {
