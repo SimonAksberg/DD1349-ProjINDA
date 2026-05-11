@@ -7,6 +7,7 @@ import com.sun.net.httpserver.HttpExchange;
 
 public class FrontEndHandler implements HttpHandler {
     private final byte[] html;
+    private final byte[] css;
 
     public FrontEndHandler() throws IOException {
         try (InputStream is = getClass().getResourceAsStream("/index.html")) {
@@ -16,15 +17,35 @@ public class FrontEndHandler implements HttpHandler {
 
             this.html = is.readAllBytes();
         }
+
+        try (InputStream is = getClass().getResourceAsStream("/style.css")) {
+            if (is == null) {
+                throw new RuntimeException("style.css not found");
+            }
+
+            this.css = is.readAllBytes();
+        }
     }
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
-        exchange.getResponseHeaders().set("Content-Type", "text/html");
-        exchange.sendResponseHeaders(200, html.length);
+        String path = exchange.getRequestURI().getPath();
+        byte[] response;
+        String contentType;
+
+        if (path.equals("/style.css")) {
+            response = css;
+            contentType = "text/css";
+        } else {
+            response = html;
+            contentType = "text/html";
+        }
+
+        exchange.getResponseHeaders().set("Content-Type", contentType);
+        exchange.sendResponseHeaders(200, response.length);
 
         try (OutputStream os = exchange.getResponseBody()) {
-            os.write(html);
+            os.write(response);
         } finally {
             exchange.close();
         }
