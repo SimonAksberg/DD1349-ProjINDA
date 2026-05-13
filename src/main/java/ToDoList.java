@@ -38,6 +38,10 @@ public class ToDoList {
         public void setTaskName(String newName) {
             this.name = newName;
         }
+
+        public void updateCompletion() {
+            this.completed = !(this.completed);
+        }
     }
 
     public ToDoList(String name) {
