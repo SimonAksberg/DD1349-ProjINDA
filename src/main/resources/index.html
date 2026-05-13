@@ -160,7 +160,18 @@
             li.setAttribute("data-task-completion", taskCompletion)
 
             li.innerHTML = `
-                ${taskName}
+                <label class="taskContent">
+                    <input 
+                        type="checkbox" 
+                        class="taskCheckbox"
+                        ${taskCompletion ? "checked" : ""}
+                    >
+
+                    <span class="taskName">
+                        ${taskName}
+                    </span>
+                </label>
+
                 <button onclick="toggleSettings(this)">
                     Settings
                 </button>
@@ -178,6 +189,14 @@
                     </div>
                 </div>
             `;
+
+            const checkbox = li.querySelector(".taskCheckbox");
+
+            checkbox.addEventListener("change", async () =>  {
+                const completed = checkbox.checked;
+
+                await updateTaskCompletion(li, taskId,taskCompletion);
+            });
 
             return li;
         }
@@ -216,7 +235,7 @@
 
             fetch(`/api/lists/${listId}/tasks`, {
                 method: "PUT",
-                body: taskId + "," + newName 
+                body: "rename" + "," + taskId + "," + newName 
             })
             .then(res => res.text())
             .then(data => {
@@ -225,6 +244,18 @@
             });
             
             newNameInput.value = "";
+        }
+
+        function updateTaskCompletion(li, taskId, taskCompletion) {
+            const listDiv = li.closest(".list");
+            const listId = listDiv.dataset.listId;
+
+            fetch(`/api/lists/${listId}/tasks`, {
+                method: "PUT",
+                body: "updateCompletion" + "," + taskId + "," + taskCompletion
+            })
+            .then(res => res.text())
+            .then(data => console.log(data));
         }
         
         function toggleSettings(button) {
