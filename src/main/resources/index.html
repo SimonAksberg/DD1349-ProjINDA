@@ -14,21 +14,7 @@
     <div id="listsContainer"></div>
 
     <script> 
-        function addList() {
-            const listName = document.getElementById("listInput").value.trim();
-            if (listName === "") return;
-
-            fetch("/api/lists", {
-                method: "POST",
-                body: listName
-            })
-            .then(res => res.text())
-            .then(data => console.log(data));
-            document.getElementById("listInput").value = "";
-            
-            loadLists();
-        }
-
+        // Render data
         function loadLists() {
             fetch("/api/lists")
             .then(res => res.json())
@@ -74,66 +60,6 @@
             `;
 
             return div;
-        }
-
-        function deleteList(button) {
-            const listDiv = button.closest(".list");
-            const listId = listDiv.dataset.listId;
-
-            fetch("/api/lists", {
-                method: "DELETE",
-                body: listId
-            })
-            .then(res => res.text())
-            .then(data => {
-                console.log(data);
-                loadLists();
-            });
-        }
-
-        function renameList(button) {
-            const listDiv = button.closest(".list");
-
-            const listId = listDiv.dataset.listId;
-
-            const newNameInput = listDiv.querySelector(".renameInput");
-
-            const newName = newNameInput.value.trim();
-            if (newName === "") return;
-
-            fetch("/api/lists", {
-                method: "PUT",
-                body: listId + "," + newName 
-            })
-            .then(res => res.text())
-            .then(data => {
-                console.log(data);
-                loadLists();
-            });
-            
-            newNameInput.value = "";
-
-        }
-
-        function addTask(button) {
-            const listDiv = button.closest(".list");
-            const listId = listDiv.dataset.listId;
-
-            const input = listDiv.querySelector(".taskInput");
-            const name = input.value.trim();
-            if (name === "") return;
-
-            fetch(`/api/lists/${listId}/tasks`, {
-                method: "POST",
-                body: name 
-            })
-            .then(res => res.text())
-            .then(data => {
-                console.log(data);
-                loadTasks(listDiv);
-            });
-        
-            input.value = "";
         }
 
         function loadTasks(listDiv) {
@@ -199,22 +125,66 @@
             return li;
         }
 
-        function deleteTask(button) {
+        // Add data
+        function addList() {
+            const listName = document.getElementById("listInput").value.trim();
+            if (listName === "") return;
+
+            fetch("/api/lists", {
+                method: "POST",
+                body: listName
+            })
+            .then(res => res.text())
+            .then(data => console.log(data));
+            document.getElementById("listInput").value = "";
+            
+            loadLists();
+        }
+
+        function addTask(button) {
             const listDiv = button.closest(".list");
             const listId = listDiv.dataset.listId;
 
-            const taskLi = button.closest(".task");
-            const taskId = taskLi.dataset.taskId;
+            const input = listDiv.querySelector(".taskInput");
+            const name = input.value.trim();
+            if (name === "") return;
 
             fetch(`/api/lists/${listId}/tasks`, {
-                method: "DELETE",
-                body: taskId
+                method: "POST",
+                body: name 
             })
             .then(res => res.text())
             .then(data => {
                 console.log(data);
                 loadTasks(listDiv);
             });
+        
+            input.value = "";
+        }
+
+        // Modify data
+        function renameList(button) {
+            const listDiv = button.closest(".list");
+
+            const listId = listDiv.dataset.listId;
+
+            const newNameInput = listDiv.querySelector(".renameInput");
+
+            const newName = newNameInput.value.trim();
+            if (newName === "") return;
+
+            fetch("/api/lists", {
+                method: "PUT",
+                body: listId + "," + newName 
+            })
+            .then(res => res.text())
+            .then(data => {
+                console.log(data);
+                loadLists();
+            });
+            
+            newNameInput.value = "";
+
         }
 
         function renameTask(button) {
@@ -255,7 +225,42 @@
             .then(res => res.text())
             .then(data => console.log(data));
         }
-        
+
+        // Delete data 
+        function deleteList(button) {
+            const listDiv = button.closest(".list");
+            const listId = listDiv.dataset.listId;
+
+            fetch("/api/lists", {
+                method: "DELETE",
+                body: listId
+            })
+            .then(res => res.text())
+            .then(data => {
+                console.log(data);
+                loadLists();
+            });
+        }
+
+        function deleteTask(button) {
+            const listDiv = button.closest(".list");
+            const listId = listDiv.dataset.listId;
+
+            const taskLi = button.closest(".task");
+            const taskId = taskLi.dataset.taskId;
+
+            fetch(`/api/lists/${listId}/tasks`, {
+                method: "DELETE",
+                body: taskId
+            })
+            .then(res => res.text())
+            .then(data => {
+                console.log(data);
+                loadTasks(listDiv);
+            });
+        }
+
+        // Helpers
         function toggleSettings(button) {
             const settingsMenu = button.nextElementSibling;
 
@@ -264,9 +269,9 @@
             } else {
                 settingsMenu.style.display = "none";
             }
-
         }
 
+        // Initial load data
         loadLists();
     </script>
 </body>
