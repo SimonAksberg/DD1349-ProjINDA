@@ -11,9 +11,14 @@
     <input class="listInput" placeholder="Create a new list">
     <button onclick="addList()">Add List</button>
 
+    <button onclick="toggleCompletedTaskVisibility()">Show/Hide Completed Tasks</button>
+
     <div id="listsContainer"></div>
 
     <script> 
+        // Global variables
+        let hideCompletedTasks = false;
+
         // Render data
         function loadLists() {
             fetch("/api/lists")
@@ -51,6 +56,8 @@
                         <button onclick="renameList(this)">Rename List</button>
                     </div>
                 </div>
+
+
                 <ul class="taskList"></ul>
             `;
 
@@ -100,7 +107,7 @@
 
             const checkbox = li.querySelector(".taskCheckbox");
             checkbox.addEventListener("change", () =>  {
-                updateTaskCompletion(li, taskId,taskCompletion);
+                updateTaskCompletion(li, taskId, taskCompletion);
             });
 
             return li;
@@ -224,6 +231,23 @@
 
                 loadTasks(listDiv);
             });
+        }
+
+        function toggleCompletedTaskVisibility() {
+            hideCompletedTasks = !hideCompletedTasks;
+
+            const allTasks = document.querySelectorAll(".task");
+
+            allTasks.forEach(task => {
+                const checkbox = task.querySelector(".taskCheckbox")
+           
+                if(checkbox.checked && hideCompletedTasks) {
+                    task.style.display = "none";
+                } else {
+                    task.style.display = "block";
+                }
+            });
+
         }
 
         // Helpers
