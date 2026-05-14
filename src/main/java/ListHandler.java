@@ -2,8 +2,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Iterator;
 
 import com.sun.net.httpserver.HttpHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -144,23 +144,34 @@ public class ListHandler implements HttpHandler {
         }
 
         if (exchange.getRequestMethod().equals("PUT")) {
+            
             InputStream is = exchange.getRequestBody();
             String taskData = new String(is.readAllBytes());
             String[] separatedTaskData = taskData.split(",");
 
-            String taskId = separatedTaskData[0];
-            String newName = separatedTaskData[1];
+            String taskId = separatedTaskData[1];
+            ToDoList.Task searchedTask = findTaskById(listId, taskId);
+            String response = "";
 
-            ArrayList<ToDoList.Task> taskList = findListById(listId).getTasksList();
+            if(separatedTaskData[0].equals("rename")) { 
 
-            for (ToDoList.Task task : taskList) {
-                if(task.getId().equals(taskId)) {
-                    task.setTaskName(newName);
-                    break;
+                String newName = separatedTaskData[2];
+                searchedTask.setTaskName(newName);
+                response = "Task renamed";
+
+            } else if (separatedTaskData[0].equals("updateCompletion")) {
+                searchedTask.updateCompletion();
+
+                Boolean taskCompletionStatus = searchedTask.isCompleted();
+
+                if(taskCompletionStatus == true) {
+                    response = "Task completed";
+                } else {
+                    response = "Task uncompleted";
                 }
+            } else {
+                response = "something went wrong";
             }
-
-            String response = "Task renamed";
 
             exchange.sendResponseHeaders(200, response.getBytes().length);
             try (OutputStream os = exchange.getResponseBody()) {
@@ -176,6 +187,17 @@ public class ListHandler implements HttpHandler {
             if(list.getListId().equals(listId)) {
                 return list;
             } 
+        }
+        return null;
+    }
+
+    private ToDoList.Task findTaskById(String listId, String taskId) {
+        ArrayList<ToDoList.Task> taskList = findListById(listId).getTasksList();
+
+        for(ToDoList.Task task : taskList) {
+            if(task.getId().equals(taskId)) {
+                return task;
+            }
         }
         return null;
     }
