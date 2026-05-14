@@ -1,4 +1,5 @@
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public class Task {
 
@@ -6,19 +7,26 @@ public class Task {
     private final String id;
     private String name;
     private boolean completed;
-    private Task subtask;
+    private Task parent;
+    private ArrayList<Task> subtasks;
 
     // Constructors
     public Task(String name) {
         id = LocalDateTime.now().toString();
         this.name = name;
         completed = false;
-        subtask = null;
+        parent = null;
+        subtasks = new ArrayList<>();
     }
 
     // Public methods
     public void updateCompletion() {
         this.completed = !(this.completed);
+    }
+
+    public void addSubtask(Task subtask) {
+        subtasks.add(subtask);
+        subtask.parent = this;
     }
 
     // Getters
@@ -34,8 +42,12 @@ public class Task {
         return completed;
     }
 
-    public Task getSubtask() {
-        return subtask;
+    public Task getParent() {
+        return parent;
+    }
+
+    public ArrayList<Task> getSubtasks() {
+        return subtasks;
     }
 
     //Setters
