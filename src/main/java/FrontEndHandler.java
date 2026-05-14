@@ -6,9 +6,12 @@ import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpExchange;
 
 public class FrontEndHandler implements HttpHandler {
+
+    // Fields
     private final byte[] html;
     private final byte[] css;
 
+    // Constructors
     public FrontEndHandler() throws IOException {
         try (InputStream is = getClass().getResourceAsStream("/index.html")) {
             if (is == null) {
@@ -27,6 +30,7 @@ public class FrontEndHandler implements HttpHandler {
         }
     }
 
+    // Public methods
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         String path = exchange.getRequestURI().getPath();
