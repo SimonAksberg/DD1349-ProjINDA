@@ -192,10 +192,8 @@
 
             const checkbox = li.querySelector(".taskCheckbox");
 
-            checkbox.addEventListener("change", async () =>  {
-                const completed = checkbox.checked;
-
-                await updateTaskCompletion(li, taskId,taskCompletion);
+            checkbox.addEventListener("change", () =>  {
+                updateTaskCompletion(li, taskId,taskCompletion);
             });
 
             return li;
