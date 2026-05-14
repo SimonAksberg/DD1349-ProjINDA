@@ -2,54 +2,20 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class ToDoList {
+
+    // Fields
     private final String id;
     private String name; 
     private ArrayList<Task> tasksList;
 
-    public static class Task {
-        private final String id;
-        private String name;
-        private boolean completed;
-        private Task subtask;
-
-        public Task(String name) {
-            id = LocalDateTime.now().toString();
-            this.name = name;
-            completed = false;
-            subtask = null;
-        }
-
-        public String getId() {
-            return id;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public boolean isCompleted() {
-            return completed;
-        }
-
-        public Task getSubtask() {
-            return subtask;
-        }
-
-        public void setTaskName(String newName) {
-            this.name = newName;
-        }
-
-        public void updateCompletion() {
-            this.completed = !(this.completed);
-        }
-    }
-
+    // Constructors
     public ToDoList(String name) {
         id = LocalDateTime.now().toString();
         this.name = name;
         tasksList = new ArrayList<>();
     }
 
+    // Public methods
     public void addTask(String name) {
         tasksList.add(new Task(name));
     }
@@ -58,15 +24,12 @@ public class ToDoList {
         tasksList.remove(t);
     }
 
-    public void changeCompletion(Task t) {
-        t.completed = !(t.completed);
-    }
-
+    // Getters
     public String getName() {
         return name;
     }
 
-    public ArrayList<ToDoList.Task> getTasksList() {
+    public ArrayList<Task> getTasksList() {
         return tasksList;
     }
 
@@ -74,6 +37,7 @@ public class ToDoList {
         return id;
     }
 
+    // Setters
     public void setListName(String newName) {
         name = newName;
     }

@@ -8,27 +8,13 @@
 <body>
     <h1>To Do's</h1>
 
-    <input id="listInput" placeholder="Create a new list">
+    <input class="listInput" placeholder="Create a new list">
     <button onclick="addList()">Add List</button>
 
     <div id="listsContainer"></div>
 
     <script> 
-        function addList() {
-            const listName = document.getElementById("listInput").value.trim();
-            if (listName === "") return;
-
-            fetch("/api/lists", {
-                method: "POST",
-                body: listName
-            })
-            .then(res => res.text())
-            .then(data => console.log(data));
-            document.getElementById("listInput").value = "";
-            
-            loadLists();
-        }
-
+        // Render data
         function loadLists() {
             fetch("/api/lists")
             .then(res => res.json())
@@ -46,6 +32,7 @@
 
         function createListElement(listName, listId) {
             const div = document.createElement("div");
+
             div.className = "list";
             div.setAttribute("data-list-id", listId);
 
@@ -54,86 +41,20 @@
                 <input class="taskInput" placeholder="New task">
                 <button onclick="addTask(this)">Add</button>
 
-                <button onclick="toggleSettings(this)">
-                    Settings
-                </button>
+                <button onclick="toggleSettings(this)">Settings</button>
 
                 <div class="settingsMenu" style="display: none;">
-                    <button onclick="deleteList(this)">
-                        Delete This List
-                    </button>
+                    <button onclick="deleteList(this)">Delete This List</button>
 
                     <div>
                         <input class="renameInput" placeholder="New list name">
-                        <button onclick="renameList(this)">
-                            Rename List
-                            </button>
+                        <button onclick="renameList(this)">Rename List</button>
                     </div>
                 </div>
                 <ul class="taskList"></ul>
             `;
 
             return div;
-        }
-
-        function deleteList(button) {
-            const listDiv = button.closest(".list");
-            const listId = listDiv.dataset.listId;
-
-            fetch("/api/lists", {
-                method: "DELETE",
-                body: listId
-            })
-            .then(res => res.text())
-            .then(data => {
-                console.log(data);
-                loadLists();
-            });
-        }
-
-        function renameList(button) {
-            const listDiv = button.closest(".list");
-
-            const listId = listDiv.dataset.listId;
-
-            const newNameInput = listDiv.querySelector(".renameInput");
-
-            const newName = newNameInput.value.trim();
-            if (newName === "") return;
-
-            fetch("/api/lists", {
-                method: "PUT",
-                body: listId + "," + newName 
-            })
-            .then(res => res.text())
-            .then(data => {
-                console.log(data);
-                loadLists();
-            });
-            
-            newNameInput.value = "";
-
-        }
-
-        function addTask(button) {
-            const listDiv = button.closest(".list");
-            const listId = listDiv.dataset.listId;
-
-            const input = listDiv.querySelector(".taskInput");
-            const name = input.value.trim();
-            if (name === "") return;
-
-            fetch(`/api/lists/${listId}/tasks`, {
-                method: "POST",
-                body: name 
-            })
-            .then(res => res.text())
-            .then(data => {
-                console.log(data);
-                loadTasks(listDiv);
-            });
-        
-            input.value = "";
         }
 
         function loadTasks(listDiv) {
@@ -161,37 +82,23 @@
 
             li.innerHTML = `
                 <label class="taskContent">
-                    <input 
-                        type="checkbox" 
-                        class="taskCheckbox"
-                        ${taskCompletion ? "checked" : ""}
-                    >
-
-                    <span class="taskName">
-                        ${taskName}
-                    </span>
+                    <input type="checkbox" class="taskCheckbox" ${taskCompletion ? "checked" : ""}>
+                    <span class="taskName">${taskName}</span>
                 </label>
 
-                <button onclick="toggleSettings(this)">
-                    Settings
-                </button>
+                <button onclick="toggleSettings(this)">Settings</button>
 
                 <div class="settingsMenu" style="display: none;">
-                    <button onclick="deleteTask(this)">
-                        Delete This Task
-                    </button>
+                    <button onclick="deleteTask(this)">Delete This Task</button>
 
                     <div>
                         <input class="renameInput" placeholder="New task name">
-                        <button onclick="renameTask(this)">
-                            Rename Task
-                        </button>
+                        <button onclick="renameTask(this)">Rename Task</button>
                     </div>
                 </div>
             `;
 
             const checkbox = li.querySelector(".taskCheckbox");
-
             checkbox.addEventListener("change", () =>  {
                 updateTaskCompletion(li, taskId,taskCompletion);
             });
@@ -199,37 +106,70 @@
             return li;
         }
 
-        function deleteTask(button) {
-            const listDiv = button.closest(".list");
-            const listId = listDiv.dataset.listId;
+        // Add data
+        function addList() {
+            const listName = getValidatedInput(document, "listInput")
+            if (!listName) return;
 
-            const taskLi = button.closest(".task");
-            const taskId = taskLi.dataset.taskId;
-
-            fetch(`/api/lists/${listId}/tasks`, {
-                method: "DELETE",
-                body: taskId
+            fetch("/api/lists", {
+                method: "POST",
+                body: listName
             })
             .then(res => res.text())
             .then(data => {
                 console.log(data);
+                
+                loadLists();
+            });
+        }
+
+        function addTask(button) {
+            const listDiv = getParentElement(button, "list");
+            const listId = getParentElementId(button, "list");
+
+            const taskName = getValidatedInput(listDiv, "taskInput");
+            if (!taskName) return;
+
+            fetch(`/api/lists/${listId}/tasks`, {
+                method: "POST",
+                body: taskName 
+            })
+            .then(res => res.text())
+            .then(data => {
+                console.log(data);
+
                 loadTasks(listDiv);
             });
         }
 
+        // Modify data
+        function renameList(button) {
+            const listDiv = getParentElement(button, "list");
+            const listId = getParentElementId(button, "list");
+
+            const newName = getValidatedInput(listDiv, "renameInput");
+            if (!newName) return;
+
+            fetch("/api/lists", {
+                method: "PUT",
+                body: listId + "," + newName 
+            })
+            .then(res => res.text())
+            .then(data => {
+                console.log(data);
+                loadLists();
+            });
+        }
+
         function renameTask(button) {
-            const listDiv = button.closest(".list");
+            const listDiv = getParentElement(button, "list");
+            const listId = getParentElementId(button, "list");
 
-            const listId = listDiv.dataset.listId;
+            const taskLi = getParentElement(button, "task");
+            const taskId = getParentElementId(button, "task");
 
-            const taskLi = button.closest(".task");
-
-            const taskId = taskLi.dataset.taskId;
-
-            const newNameInput = taskLi.querySelector(".renameInput");
-
-            const newName = newNameInput.value.trim();
-            if (newName === "") return;
+            const newName = getValidatedInput(taskLi, "renameInput");
+            if (!newName) return;
 
             fetch(`/api/lists/${listId}/tasks`, {
                 method: "PUT",
@@ -240,14 +180,11 @@
                 console.log(data);
                 loadTasks(listDiv);
             });
-            
-            newNameInput.value = "";
         }
 
         function updateTaskCompletion(li, taskId, taskCompletion) {
-            const listDiv = li.closest(".list");
-            const listId = listDiv.dataset.listId;
-
+            const listId = getParentElementId(li, "list")
+            
             fetch(`/api/lists/${listId}/tasks`, {
                 method: "PUT",
                 body: "updateCompletion" + "," + taskId + "," + taskCompletion
@@ -255,7 +192,41 @@
             .then(res => res.text())
             .then(data => console.log(data));
         }
-        
+
+        // Delete data 
+        function deleteList(button) {
+            const listId = getParentElementId(button, "list");
+
+            fetch("/api/lists", {
+                method: "DELETE",
+                body: listId
+            })
+            .then(res => res.text())
+            .then(data => {
+                console.log(data);
+
+                loadLists();
+            });
+        }
+
+        function deleteTask(button) {
+            const listDiv = getParentElement(button, "list");
+            const listId = getParentElementId(button, "list");
+            const taskId = getParentElementId(button, "task");
+
+            fetch(`/api/lists/${listId}/tasks`, {
+                method: "DELETE",
+                body: taskId
+            })
+            .then(res => res.text())
+            .then(data => {
+                console.log(data);
+
+                loadTasks(listDiv);
+            });
+        }
+
+        // Helpers
         function toggleSettings(button) {
             const settingsMenu = button.nextElementSibling;
 
@@ -264,9 +235,27 @@
             } else {
                 settingsMenu.style.display = "none";
             }
-
         }
 
+        function getParentElement(currentElement, classToFind) {
+            const parentElement = currentElement.closest(`.${classToFind}`);
+            return parentElement;
+        }
+
+        function getParentElementId(currentElement, classToFind) {
+            const parentElement = currentElement.closest(`.${classToFind}`);
+            return parentElement.dataset[`${classToFind}Id`];
+        }
+
+        function getValidatedInput(container, classToFind) {
+            const input = container.querySelector(`.${classToFind}`);
+            const value = input.value.trim();
+            input.value = "";
+            if (value === "") return null;
+            return value;
+        }
+
+        // Initial load data
         loadLists();
     </script>
 </body>
