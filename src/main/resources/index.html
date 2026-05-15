@@ -137,7 +137,12 @@
 
             fetch(`/api/lists/${listId}/tasks`, {
                 method: "POST",
-                body: taskName 
+                headers: { 
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    taskName: taskName
+                })
             })
             .then(res => res.text())
             .then(data => {
@@ -152,8 +157,8 @@
             const parentTaskId = getParentElementId(button, "task");
 
             const parentTask = getParentElement(button, "task");
-            const subtaskName = getValidatedInput(parentTask, "subtaskInput");
-            if (!subtaskName) return;
+            const taskName = getValidatedInput(parentTask, "subtaskInput");
+            if (!taskName) return;
 
             fetch(`/api/lists/${listId}/tasks`, {
                 method: "POST",
@@ -162,7 +167,7 @@
                 },
                 body: JSON.stringify({
                     parentTaskId: parentTaskId,
-                    subtaskName: subtaskName
+                    taskName: taskName
                 })
             })
             .then(res => res.text())
