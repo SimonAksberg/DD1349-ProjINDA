@@ -107,7 +107,7 @@
 
             const checkbox = li.querySelector(".taskCheckbox");
             checkbox.addEventListener("change", () =>  {
-                updateTaskCompletion(li, taskId);
+                updateTaskCompletion(li, taskId, taskCompletion);
             });
 
             return li;
@@ -189,12 +189,12 @@
             });
         }
 
-        function updateTaskCompletion(li, taskId) {
+        function updateTaskCompletion(li, taskId, taskCompletion) {
             const listId = getParentElementId(li, "list")
             
             fetch(`/api/lists/${listId}/tasks`, {
                 method: "PUT",
-                body: "updateCompletion" + "," + taskId
+                body: "updateCompletion" + "," + taskId + "," + taskCompletion
             })
             .then(res => res.text())
             .then(data => console.log(data));
