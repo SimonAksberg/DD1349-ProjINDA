@@ -67,23 +67,24 @@
                 taskList.innerHTML = "";
 
                 tasks.forEach(task => {
-                    const li = createTaskElement(task.name, task.id, task.completed);
+                    if (task.hasParent) return;
+                    const li = createTaskElement(task);
                     taskList.appendChild(li);
                 });
             });
         }
 
-        function createTaskElement(taskName, taskId, taskCompletion) {
+        function createTaskElement(task) {
             const li = document.createElement("li");
 
             li.className = "task";
-            li.setAttribute("data-task-id", taskId);
-            li.setAttribute("data-task-completion", taskCompletion)
+            li.setAttribute("data-task-id", task.id);
+            li.setAttribute("data-task-completion", task.completed)
 
             li.innerHTML = `
                 <label class="taskContent">
-                    <input type="checkbox" class="taskCheckbox" ${taskCompletion ? "checked" : ""}>
-                    <span class="taskName">${taskName}</span>
+                    <input type="checkbox" class="taskCheckbox" ${task.completed ? "checked" : ""}>
+                    <span class="taskName">${task.name}</span>
                 </label>
 
                 <button onclick="toggleSettings(this)">Settings</button>
@@ -105,8 +106,17 @@
 
             const checkbox = li.querySelector(".taskCheckbox");
             checkbox.addEventListener("change", () =>  {
-                updateTaskCompletion(li, taskId,taskCompletion);
+                updateTaskCompletion(li, task.id, task.completed);
             });
+
+            if (task.subtasks && task.subtasks.length > 0) {
+                const subtaskUl = document.createElement("ul");
+                subtaskUl.className = "taskList";
+                for (const subtask of task.subtasks) {
+                    subtaskUl.appendChild(createTaskElement(subtask));
+                }
+                li.appendChild(subtaskUl);
+            }
 
             return li;
         }

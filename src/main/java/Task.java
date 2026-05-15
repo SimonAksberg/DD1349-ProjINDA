@@ -52,6 +52,10 @@ public class Task {
         return subtasks;
     }
 
+    public boolean isHasParent() {
+        return parent != null;
+    }
+
     //Setters
     public void setTaskName(String newName) {
         this.name = newName;
