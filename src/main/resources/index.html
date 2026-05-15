@@ -74,30 +74,36 @@
                 taskList.innerHTML = "";
 
                 tasks.forEach(task => {
-                    const li = createTaskElement(task.name, task.id, task.completed);
+                    if (task.hasParent) return;
+                    const li = createTaskElement(task);
                     taskList.appendChild(li);
                 });
             });
         }
 
-        function createTaskElement(taskName, taskId, taskCompletion) {
+        function createTaskElement(task) {
             const li = document.createElement("li");
 
             li.className = "task";
-            li.setAttribute("data-task-id", taskId);
-            li.setAttribute("data-task-completion", taskCompletion)
+            li.setAttribute("data-task-id", task.id);
+            li.setAttribute("data-task-completion", task.completed)
 
             li.innerHTML = `
                 <label class="taskContent">
-                    <input type="checkbox" class="taskCheckbox" ${taskCompletion ? "checked" : ""}>
-                    <span class="taskName">${taskName}</span>
+                    <input type="checkbox" class="taskCheckbox" ${task.completed ? "checked" : ""}>
+                    <span class="taskName">${task.name}</span>
                 </label>
 
                 <button onclick="toggleSettings(this)">Settings</button>
 
                 <div class="settingsMenu" style="display: none;">
-                    <button onclick="deleteTask(this)">Delete This Task</button>
+                    <div>
+                        <input class="subtaskInput" placeholder="Add subtask">
+                        <button onclick="addSubtask(this)">Add</button>
+                    </div>
 
+                    <button onclick="deleteTask(this)">Delete This Task</button>
+                    
                     <div>
                         <input class="renameInput" placeholder="New task name">
                         <button onclick="renameTask(this)">Rename Task</button>
@@ -107,8 +113,17 @@
 
             const checkbox = li.querySelector(".taskCheckbox");
             checkbox.addEventListener("change", () =>  {
-                updateTaskCompletion(li, taskId);
+                updateTaskCompletion(li, task.id);
             });
+
+            if (task.subtasks && task.subtasks.length > 0) {
+                const subtaskUl = document.createElement("ul");
+                subtaskUl.className = "taskList";
+                for (const subtask of task.subtasks) {
+                    subtaskUl.appendChild(createTaskElement(subtask));
+                }
+                li.appendChild(subtaskUl);
+            }
 
             return li;
         }
@@ -139,12 +154,44 @@
 
             fetch(`/api/lists/${listId}/tasks`, {
                 method: "POST",
-                body: taskName 
+                headers: { 
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    taskName: taskName
+                })
             })
             .then(res => res.text())
             .then(data => {
                 console.log(data);
 
+                loadTasks(listDiv);
+            });
+        }
+
+        function addSubtask(button) {
+            const listId = getParentElementId(button, "list");
+            const parentTaskId = getParentElementId(button, "task");
+
+            const parentTask = getParentElement(button, "task");
+            const taskName = getValidatedInput(parentTask, "subtaskInput");
+            if (!taskName) return;
+
+            fetch(`/api/lists/${listId}/tasks`, {
+                method: "POST",
+                headers: { 
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    parentTaskId: parentTaskId,
+                    taskName: taskName
+                })
+            })
+            .then(res => res.text())
+            .then(data => {
+                console.log(data);
+
+                const listDiv = getParentElement(button, "list");
                 loadTasks(listDiv);
             });
         }

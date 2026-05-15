@@ -1,4 +1,6 @@
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class Task {
 
@@ -6,19 +8,31 @@ public class Task {
     private final String id;
     private String name;
     private boolean completed;
-    private Task subtask;
+    @JsonIgnore
+    private Task parent;
+    private ArrayList<Task> subtasks;
 
     // Constructors
     public Task(String name) {
         id = LocalDateTime.now().toString();
         this.name = name;
         completed = false;
-        subtask = null;
+        parent = null;
+        subtasks = new ArrayList<>();
     }
 
     // Public methods
     public void updateCompletion() {
         this.completed = !(this.completed);
+    }
+
+    public void addSubtask(Task subtask) {
+        subtasks.add(subtask);
+        subtask.parent = this;
+    }
+
+    public void removeSubtask(Task subtask) {
+        subtasks.remove(subtask);
     }
 
     // Getters
@@ -34,8 +48,16 @@ public class Task {
         return completed;
     }
 
-    public Task getSubtask() {
-        return subtask;
+    public Task getParent() {
+        return parent;
+    }
+
+    public ArrayList<Task> getSubtasks() {
+        return subtasks;
+    }
+
+    public boolean isHasParent() {
+        return parent != null;
     }
 
     //Setters

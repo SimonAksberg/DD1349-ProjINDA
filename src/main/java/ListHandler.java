@@ -92,9 +92,15 @@ public class ListHandler implements HttpHandler {
 
         // POST
         if (exchange.getRequestMethod().equals("POST")) {
-            String name = getRequestBodyString(exchange);
+            CreateTaskRequest request = mapper.readValue(exchange.getRequestBody(), CreateTaskRequest.class);
+            
+            String name = request.getTaskName();
+            Task newTask = findListById(listId).addTask(name);
 
-            findListById(listId).addTask(name);
+            if (request.getParentTaskId() != null) {
+                Task parent = findTaskById(listId, request.getParentTaskId());
+                parent.addSubtask(newTask);
+            }
 
             String response = "Task added";
 
@@ -136,7 +142,11 @@ public class ListHandler implements HttpHandler {
         if (exchange.getRequestMethod().equals("DELETE")) {
             String taskId = getRequestBodyString(exchange);
 
-            findListById(listId).getTasksList().removeIf(task -> task.getId().equals(taskId));
+            Task task = findTaskById(listId, taskId);
+            findListById(listId).removeTask(task);
+            if (task.isHasParent()) {
+                task.getParent().removeSubtask(task);
+            }
 
             String response = "Task deleted";
 

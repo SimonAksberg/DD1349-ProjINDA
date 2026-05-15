@@ -16,8 +16,10 @@ public class ToDoList {
     }
 
     // Public methods
-    public void addTask(String name) {
-        tasksList.add(new Task(name));
+    public Task addTask(String name) {
+        Task task = new Task(name);
+        tasksList.add(task);
+        return task;
     }
 
     public void removeTask(Task t) {
