@@ -26,13 +26,13 @@ public class ListHandler implements HttpHandler {
         String[] parts = path.split("/");
         if (parts.length > 4 && parts[4].equals("tasks")) {
             handleTasks(exchange, parts[3]);
-            return;  
+            return;
         }
 
         // GET
         if (exchange.getRequestMethod().equals("GET")) {
             String response = mapper.writeValueAsString(lists);
-                    
+
             sendJsonResponse(exchange, response);
             return;
         }
@@ -47,7 +47,7 @@ public class ListHandler implements HttpHandler {
 
             sendResponse(exchange, response);
             return;
-        } 
+        }
 
         // PUT
         if (exchange.getRequestMethod().equals("PUT")) {
@@ -77,7 +77,7 @@ public class ListHandler implements HttpHandler {
 
             sendResponse(exchange, response);
             return;
-        }  
+        }
     }
 
     private void handleTasks(HttpExchange exchange, String listId) throws IOException {
@@ -85,7 +85,7 @@ public class ListHandler implements HttpHandler {
         if (exchange.getRequestMethod().equals("GET")) {
             ToDoList list = findListById(listId);
             String response = mapper.writeValueAsString(list.getTasksList());
-                    
+
             sendJsonResponse(exchange, response);
             return;
         }
@@ -103,7 +103,7 @@ public class ListHandler implements HttpHandler {
             }
 
             String response = "Task added";
-        
+
             sendResponse(exchange, response);
             return;
         }
@@ -117,16 +117,15 @@ public class ListHandler implements HttpHandler {
             Task searchedTask = findTaskById(listId, taskId);
             String response = "";
 
-            if(separatedTaskData[0].equals("rename")) { 
+            if (separatedTaskData[0].equals("rename")) {
                 String newName = separatedTaskData[2];
                 searchedTask.setTaskName(newName);
 
                 response = "Task renamed";
             } else if (separatedTaskData[0].equals("updateCompletion")) {
                 searchedTask.updateCompletion();
-                Boolean taskCompletionStatus = searchedTask.isCompleted();
 
-                if(taskCompletionStatus == true) {
+                if (searchedTask.isCompleted()) {
                     response = "Task completed";
                 } else {
                     response = "Task uncompleted";
@@ -159,9 +158,9 @@ public class ListHandler implements HttpHandler {
     // General private helper methods
     private ToDoList findListById(String listId) {
         for (ToDoList list : lists) {
-            if(list.getListId().equals(listId)) {
+            if (list.getListId().equals(listId)) {
                 return list;
-            } 
+            }
         }
         return null;
     }
@@ -169,8 +168,8 @@ public class ListHandler implements HttpHandler {
     private Task findTaskById(String listId, String taskId) {
         ArrayList<Task> taskList = findListById(listId).getTasksList();
 
-        for(Task task : taskList) {
-            if(task.getId().equals(taskId)) {
+        for (Task task : taskList) {
+            if (task.getId().equals(taskId)) {
                 return task;
             }
         }
@@ -179,10 +178,10 @@ public class ListHandler implements HttpHandler {
 
     private void sendResponse(HttpExchange exchange, String response) throws IOException {
         exchange.sendResponseHeaders(200, response.getBytes().length);
-            try (OutputStream os = exchange.getResponseBody()) {
-                os.write(response.getBytes());
-            }
-            exchange.close();
+        try (OutputStream os = exchange.getResponseBody()) {
+            os.write(response.getBytes());
+        }
+        exchange.close();
     }
 
     private void sendJsonResponse(HttpExchange exchange, String response) throws IOException {

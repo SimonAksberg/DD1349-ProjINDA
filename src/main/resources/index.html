@@ -11,9 +11,14 @@
     <input class="listInput" placeholder="Create a new list">
     <button onclick="addList()">Add List</button>
 
+    <button onclick="toggleCompletedTaskVisibility()">Show/Hide Completed Tasks</button>
+
     <div id="listsContainer"></div>
 
     <script> 
+        // Global variables
+        let hideCompletedTasks = false;
+
         // Render data
         function loadLists() {
             fetch("/api/lists")
@@ -51,6 +56,8 @@
                         <button onclick="renameList(this)">Rename List</button>
                     </div>
                 </div>
+
+
                 <ul class="taskList"></ul>
             `;
 
@@ -106,7 +113,7 @@
 
             const checkbox = li.querySelector(".taskCheckbox");
             checkbox.addEventListener("change", () =>  {
-                updateTaskCompletion(li, task.id, task.completed);
+                updateTaskCompletion(li, task.id);
             });
 
             if (task.subtasks && task.subtasks.length > 0) {
@@ -229,12 +236,12 @@
             });
         }
 
-        function updateTaskCompletion(li, taskId, taskCompletion) {
+        function updateTaskCompletion(li, taskId) {
             const listId = getParentElementId(li, "list")
             
             fetch(`/api/lists/${listId}/tasks`, {
                 method: "PUT",
-                body: "updateCompletion" + "," + taskId + "," + taskCompletion
+                body: "updateCompletion" + "," + taskId
             })
             .then(res => res.text())
             .then(data => console.log(data));
@@ -271,6 +278,23 @@
 
                 loadTasks(listDiv);
             });
+        }
+
+        function toggleCompletedTaskVisibility() {
+            hideCompletedTasks = !hideCompletedTasks;
+
+            const allTasks = document.querySelectorAll(".task");
+
+            allTasks.forEach(task => {
+                const checkbox = task.querySelector(".taskCheckbox")
+           
+                if(checkbox.checked && hideCompletedTasks) {
+                    task.style.display = "none";
+                } else {
+                    task.style.display = "block";
+                }
+            });
+
         }
 
         // Helpers
