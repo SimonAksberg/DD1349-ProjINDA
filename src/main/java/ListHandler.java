@@ -143,7 +143,11 @@ public class ListHandler implements HttpHandler {
         if (exchange.getRequestMethod().equals("DELETE")) {
             String taskId = getRequestBodyString(exchange);
 
-            findListById(listId).getTasksList().removeIf(task -> task.getId().equals(taskId));
+            Task task = findTaskById(listId, taskId);
+            findListById(listId).removeTask(task);
+            if (task.isHasParent()) {
+                task.getParent().removeSubtask(task);
+            }
 
             String response = "Task deleted";
 

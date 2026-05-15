@@ -31,6 +31,10 @@ public class Task {
         subtask.parent = this;
     }
 
+    public void removeSubtask(Task subtask) {
+        subtasks.remove(subtask);
+    }
+
     // Getters
     public String getId() {
         return id;
