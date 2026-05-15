@@ -1,5 +1,6 @@
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class Task {
 
@@ -7,6 +8,7 @@ public class Task {
     private final String id;
     private String name;
     private boolean completed;
+    @JsonIgnore
     private Task parent;
     private ArrayList<Task> subtasks;
 
