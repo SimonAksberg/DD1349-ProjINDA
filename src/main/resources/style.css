@@ -43,3 +43,25 @@ h1 {
 
     min-height: 400px;
 }
+
+.listHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-left: 1rem;
+    margin-right: 1rem;
+}
+
+.taskControls {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+
+    margin-bottom: 1rem;
+}
+
+.taskInput {
+    flex: 1;
+    max-width: 5rem;
+}
