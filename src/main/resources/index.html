@@ -99,13 +99,15 @@
             li.setAttribute("data-task-completion", task.completed)
 
             li.innerHTML = `
-                <label class="taskContent">
-                    <input type="checkbox" class="taskCheckbox" ${task.completed ? "checked" : ""}>
-                    <span class="taskName">${task.name}</span>
-                </label>
+                <div class="taskRow">
+                    <label class="taskContent">
+                        <input type="checkbox" class="taskCheckbox" ${task.completed ? "checked" : ""}>
+                        <span class="taskName">${task.name}</span>
+                    </label>
 
-                <button onclick="toggleSettings(this)">⚙︎</button>
-
+                    <button onclick="toggleSettings(this)">⚙︎</button>
+                </div>
+                
                 <div class="settingsMenu" style="display: none;">
                     <div>
                         <input class="subtaskInput" placeholder="Add subtask">
