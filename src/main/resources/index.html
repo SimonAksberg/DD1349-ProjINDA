@@ -48,11 +48,15 @@
             div.setAttribute("data-list-id", listId);
 
             div.innerHTML = `
-                <h2>${listName}</h2>
-                <input class="taskInput" placeholder="New task">
-                <button onclick="addTask(this)">Add</button>
+                <div class="listHeader">
+                    <h2>${listName}</h2>
+                    <button onclick="toggleSettings(this)">⚙︎</button>
+                </div>
 
-                <button onclick="toggleSettings(this)">⚙︎</button>
+                <div class="taskControls">
+                    <input class="taskInput" placeholder="New task">
+                    <button onclick="addTask(this)">Add</button>
+                </div>
 
                 <div class="settingsMenu" style="display: none;">
                     <button onclick="deleteList(this)">Delete</button>
@@ -305,7 +309,9 @@
 
         // Helpers
         function toggleSettings(button) {
-            const settingsMenu = button.nextElementSibling;
+            const parent = button.closest(".list, .task");
+
+            const settingsMenu = parent.querySelector(".settingsMenu");
 
             if (settingsMenu.style.display === "none") {
                 settingsMenu.style.display = "block";
