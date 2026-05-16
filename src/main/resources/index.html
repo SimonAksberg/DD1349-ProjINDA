@@ -9,10 +9,15 @@
 <body>
     <h1>To Do's</h1>
 
-    <input class="listInput" placeholder="Create a new list">
-    <button onclick="addList()">Add List</button>
+    <div class="topBar"></div>
+        <div class="listControls"></div>
+            <input class="listInput" placeholder="Create a new list">
+            <button onclick="addList()">Add List</button>
+        </div>
 
-    <button onclick="toggleCompletedTaskVisibility()">Show/Hide Completed Tasks</button>
+        <button onclick="toggleCompletedTaskVisibility()">Show/Hide Completed Tasks</button>
+
+    </div>
 
     <div id="listsContainer"></div>
 
