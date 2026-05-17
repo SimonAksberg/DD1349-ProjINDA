@@ -39,7 +39,7 @@ h1 {
 
     padding: 1rem;
 
-    background: white;
+    background: #E5BEB5;
 
     min-height: 400px;
 }
@@ -76,7 +76,7 @@ input {
 
 body {
     font-family: comicsansms;
-    background-color: #F9DFDF;
+    background-color: #FCF9EA;
 }
 
 ::placeholder {
