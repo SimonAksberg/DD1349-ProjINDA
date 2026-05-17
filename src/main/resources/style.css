@@ -51,6 +51,7 @@ h1 {
 
     margin-left: 1rem;
     margin-right: 1rem;
+    margin-bottom: 1rem;
 }
 
 .taskControls {
@@ -70,6 +71,7 @@ input {
     border-radius: 5px;
     background-color: #FBEFEF;
     color: black;
+    max-width: 5rem;
 }
 
 body {
@@ -79,4 +81,9 @@ body {
 
 ::placeholder {
     color: grey; 
+}
+
+.listInput {
+    display: flex;
+    max-width: 7rem;
 }
