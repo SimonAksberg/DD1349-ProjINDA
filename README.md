@@ -4,7 +4,7 @@ A browser based to-do list application with support for multiple lists, subtasks
 ## About the Project
 The project was built as part of our last programming course in the first year of a computer science program. Our focus was to consolidate our knowledge in Java and get an introduction to web development, with a focus on understanding the frontend-backend communication.
 
-Given the course's AI policy, it was also a way to learn how to freely use generative AI as a parner, and reflect on the pros and cons of that process.
+Given the course's AI policy, it was also a way to learn how to freely use generative AI as a partner, and reflect on the pros and cons of that process.
 
 
 ## Features
