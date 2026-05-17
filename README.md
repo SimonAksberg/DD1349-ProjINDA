@@ -1,8 +1,8 @@
 # Planner Pal
-A browser based to-do list application with support for multiple lists, subtasks and task completion tracking.
+A browser-based to-do list application with support for multiple lists, subtasks and task completion tracking.
 
 ## About the Project
-The project was built as part of our last programming course in the first year of a computer science program. Our focus was to consolidate our knowledge in Java and get an introduction to web development, with a focus on understanding the frontend-backend communication.
+The project was built as part of our last programming course in the first-year of a computer science program. Our focus was to consolidate our knowledge in Java and get an introduction to web development, with a focus on understanding the frontend-backend communication.
 
 Given the course's AI policy, it was also a way to learn how to freely use generative AI as a partner, and reflect on the pros and cons of that process.
 
@@ -46,21 +46,21 @@ Given the course's AI policy, it was also a way to learn how to freely use gener
 1. Create a new list at the top of the screen
 2. Add one or more tasks to the list you just created
 3. Add subtasks to each task if desired
-3. Once finished, mark tasks or subtasks as complete by clicking the task name or checkbox
-4. Open settings menu for list/tasks to rename or delete outdated ones
-5. Hide completed tasks if you wish
+4. Once finished, mark tasks or subtasks as complete by clicking the task name or checkbox
+5. Open settings menu for list/tasks to rename or delete outdated ones
+6. Hide completed tasks if you wish
 
 ## Project Structure
 
 ```text
-DD1340-ProjINDA/
+DD1349-ProjINDA/
 ├── src/
 │   └── main/
 │        ├── java/
-│        │   └── backend/
+│        │   └── backend files
 │        │
 │        └── resources/
-│            └── frontend/
+│            └── frontend files
 └── pom.xml
 ```
 
