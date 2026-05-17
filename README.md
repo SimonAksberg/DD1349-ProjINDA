@@ -1,10 +1,8 @@
-# Planning Pal
+# Planner Pal
 A browser based to-do list application with support for multiple lists, subtasks and task completion tracking.
 
 ## About the Project
-**explains why it exists / what problem it solves / what the goal was**
-
-The project was built as part of our last programming course in the first year of a computer science program. Our focus was to consolidate (*Sv. befästa*) our knowledge in Java and get an introduction to web development, with a focus on understanding the frontend-backend communication.
+The project was built as part of our last programming course in the first year of a computer science program. Our focus was to consolidate our knowledge in Java and get an introduction to web development, with a focus on understanding the frontend-backend communication.
 
 Given the course's AI policy, it was also a way to learn how to freely use generative AI as a parner, and reflect on the pros and cons of that process.
 
@@ -12,8 +10,8 @@ Given the course's AI policy, it was also a way to learn how to freely use gener
 ## Features
 - Create one or multiple lists shown simultaneously
 - Manage lists from settings menu
-- Add, rename and delete lists
-- Add tasks and subtasks
+- Add, rename and delete lists and tasks
+- Add infinite subtasks
 - Mark tasks as completed
 - Settings menu for task management
 - Toggle completed task visibility
