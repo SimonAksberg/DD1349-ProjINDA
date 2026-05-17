@@ -49,21 +49,24 @@
             div.innerHTML = `
                 <div class="listHeader">
                     <h2>${listName}</h2>
-                    <button onclick="toggleSettings(this)">⚙︎</button>
+
+                    <div class="settingsContainer">
+                        <button onclick="toggleSettings(this)">⚙︎</button>
+                        <div class="settingsMenu" style="display: none;">
+                            <button onclick="deleteList(this)">Delete</button>
+
+                            <div>
+                                <input class="renameInput" placeholder="New list name">
+                                <button onclick="renameList(this)">Rename</button>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
 
                 <div class="taskControls">
                     <input class="taskInput" placeholder="New task">
                     <button onclick="addTask(this)">Add</button>
-                </div>
-
-                <div class="settingsMenu" style="display: none;">
-                    <button onclick="deleteList(this)">Delete</button>
-
-                    <div>
-                        <input class="renameInput" placeholder="New list name">
-                        <button onclick="renameList(this)">Rename</button>
-                    </div>
                 </div>
 
 
