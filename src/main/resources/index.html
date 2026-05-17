@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>To-Do App</title>
+    <meta charset="utf-8">
 
     <link rel="stylesheet" href="style.css">
 </head>
@@ -46,14 +47,14 @@
                 <input class="taskInput" placeholder="New task">
                 <button onclick="addTask(this)">Add</button>
 
-                <button onclick="toggleSettings(this)">Settings</button>
+                <button onclick="toggleSettings(this)">⚙︎</button>
 
                 <div class="settingsMenu" style="display: none;">
-                    <button onclick="deleteList(this)">Delete This List</button>
+                    <button onclick="deleteList(this)">Delete</button>
 
                     <div>
                         <input class="renameInput" placeholder="New list name">
-                        <button onclick="renameList(this)">Rename List</button>
+                        <button onclick="renameList(this)">Rename</button>
                     </div>
                 </div>
 
@@ -94,20 +95,20 @@
                     <span class="taskName">${task.name}</span>
                 </label>
 
-                <button onclick="toggleSettings(this)">Settings</button>
+                <button onclick="toggleSettings(this)">⚙︎</button>
 
                 <div class="settingsMenu" style="display: none;">
                     <div>
                         <input class="subtaskInput" placeholder="Add subtask">
                         <button onclick="addSubtask(this)">Add</button>
                     </div>
-
-                    <button onclick="deleteTask(this)">Delete This Task</button>
                     
                     <div>
                         <input class="renameInput" placeholder="New task name">
-                        <button onclick="renameTask(this)">Rename Task</button>
+                        <button onclick="renameTask(this)">Rename</button>
                     </div>
+
+                    <button onclick="deleteTask(this)">Delete</button>
                 </div>
             `;
 
