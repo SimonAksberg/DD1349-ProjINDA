@@ -37,24 +37,9 @@ Given the course's AI policy, it was also a way to learn how to freely use gener
 
 ## Installation / Setup
 
-Clone the repository:
-
-```bash
-git clone <repo-url>
-cd <project-name>
-```
-
-Open the project root folder in your preferred IDE.
-
-Examples:
-- VS Code: `code .`
-- IntelliJ IDEA: `Open Folder`
-
-### Running the application
-
-#### Run through IDE
-1. Run `Server.java` through your IDE (not through the terminal). Note: Maven dependencies should be automatically detected and loaded by your IDE.
-2. Open a web browser and paste the following link: `http://localhost:8000`
+1. Clone the repository and open the project **root** folder in your preferred IDE.
+2. Run `Server.java` through your IDE (not through the terminal). Note: Maven dependencies should be automatically detected and loaded by your IDE.
+3. Open a web browser and paste the following link: `http://localhost:8000`
 
 
 ## How to use
