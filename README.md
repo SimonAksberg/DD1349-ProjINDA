@@ -17,12 +17,12 @@ Given the course's AI policy, it was also a way to learn how to freely use gener
 - Toggle completed task visibility
 
 ## Screenshots
-Will be added later
+![alt text](<Demo.png>)
 
 ## Technologies Used
 ### Backend
 - Java
-- Maven
+- Maven for dependency management and build configuration
 - JSON for HTTP request/response formatting
 
 ### Frontend
@@ -31,8 +31,8 @@ Will be added later
 - JavaScript
 
 ## Requirements
-- Java JDK 21 or later
-- Maven 3.9+ (only required for terminal execution)
+- Java installed
+- Maven (usually built into IDE)
 - A modern web browser
 
 ## Installation / Setup
@@ -52,27 +52,18 @@ Examples:
 
 ### Running the application
 
-#### Option 1 — Run through IDE
-Run `Server.java` after Maven dependencies have loaded.
+#### Run through IDE
+1. Run `Server.java` through your IDE (not through the terminal). Note: Maven dependencies should be automatically detected and loaded by your IDE.
+2. Open a web browser and paste the following link: `http://localhost:8000`
 
-#### Option 2 — Run through terminal
-Requirements:
-- Java installed
-- Maven installed globally
 
-From the project root:
-
-```bash
-mvn compile
-mvn exec:java
-```
 ## How to use
 1. Create a new list at the top of the screen
 2. Add one or more tasks to the list you just created
 3. Add subtasks to each task if desired
 3. Once finished, mark tasks or subtasks as complete by clicking the task name or checkbox
 4. Open settings menu for list/tasks to rename or delete outdated ones
-5. Hide
+5. Hide completed tasks if you wish
 
 ## Project Structure
 
@@ -88,9 +79,9 @@ DD1340-ProjINDA/
 └── pom.xml
 ```
 
-**backend:** handles HTTP requests, data management, and server-side application logic
+**Backend:** handles HTTP requests, data management, and server-side application logic
 
-**frontend:** contains the user interface and client-side interaction logic
+**Frontend:** contains the user interface and client-side interaction logic
 
 ## Future Improvements
 - Move tasks between lists
@@ -98,8 +89,8 @@ DD1340-ProjINDA/
 - Continue improving UI
 
 ## Contributors
-- Simon Aksberg, < link to own github?>
-- Hanna Zhang, < link to own github?>
+- Simon Aksberg
+- Hanna Zhang
 
 ## License
 This project was created for educational purposes.
